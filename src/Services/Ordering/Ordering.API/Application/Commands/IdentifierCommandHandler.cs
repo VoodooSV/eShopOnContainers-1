@@ -4,13 +4,15 @@ using System.Threading.Tasks;
 
 namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands
 {
+    using System.Threading;
+
     /// <summary>
     /// Provides a base implementation for handling duplicate request and ensuring idempotent updates, in the cases where
     /// a requestid sent by client is used to detect duplicate requests.
     /// </summary>
     /// <typeparam name="T">Type of the command handler that performs the operation if request is not duplicated</typeparam>
     /// <typeparam name="R">Return value of the inner command handler</typeparam>
-    public class IdentifierCommandHandler<T, R> : IAsyncRequestHandler<IdentifiedCommand<T, R>, R>
+    public class IdentifierCommandHandler<T, R> : IRequestHandler<IdentifiedCommand<T, R>, R>
         where T : IRequest<R>
     {
         private readonly IMediator _mediator;
@@ -37,7 +39,7 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands
         /// </summary>
         /// <param name="message">IdentifiedCommand which contains both original command & request ID</param>
         /// <returns>Return value of inner command or default value if request same ID was found</returns>
-        public async Task<R> Handle(IdentifiedCommand<T, R> message)
+        public async Task<R> Handle(IdentifiedCommand<T, R> message, CancellationToken cancellationToken)
         {
             var alreadyExists = await _requestManager.ExistAsync(message.Id);
             if (alreadyExists)
@@ -54,6 +56,4 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands
             }
         }
     }
-
-
 }

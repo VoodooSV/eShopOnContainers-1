@@ -8,25 +8,24 @@
     using Infrastructure.AutofacModules;
     using Infrastructure.Filters;
     using Infrastructure.Services;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.HealthChecks;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
+    using AspNetCore.Authentication.JwtBearer;
+    using AspNetCore.Builder;
+    using AspNetCore.Hosting;
+    using EntityFrameworkCore;
+    using Extensions.Configuration;
+    using Extensions.DependencyInjection;
+    using Extensions.HealthChecks;
+    using Extensions.Logging;
     using NServiceBus;
     using Polly;
     using Swashbuckle.AspNetCore.Swagger;
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
-    using System.Diagnostics;
     using System.IdentityModel.Tokens.Jwt;
     using System.Reflection;
     using System.Threading.Tasks;
+    using MediatR;
     using NServiceBus.Persistence.Sql;
     using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure;
 
@@ -116,13 +115,15 @@
             ConfigureAuthService(services);
             services.AddOptions();
 
+            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
+
             //configure autofac
 
             var containerBuilder = new ContainerBuilder();
 
             containerBuilder.Populate(services);
 
-            containerBuilder.RegisterModule(new MediatorModule());
+//            containerBuilder.RegisterModule(new MediatorModule());
             containerBuilder.RegisterModule(new ApplicationModule(Configuration["ConnectionString"]));
 
             // NServiceBus
@@ -152,7 +153,6 @@
                 .UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                    c.ConfigureOAuth2("orderingswaggerui", "", "", "Ordering Swagger UI");
                 });
 
             WaitForSqlAvailabilityAsync(loggerFactory, app, env).Wait();

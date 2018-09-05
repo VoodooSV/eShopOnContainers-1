@@ -63,11 +63,11 @@ namespace Microsoft.eShopOnContainers.Services.Locations.API.Infrastructure.Serv
             return true;
         }
 
-        private void PublishNewUserLocationPositionIntegrationEvent(string userId, List<Locations> newLocations)
+        private async void PublishNewUserLocationPositionIntegrationEvent(string userId, List<Locations> newLocations)
         {
             var newUserLocations = MapUserLocationDetails(newLocations);
             var @event = new UserLocationUpdatedIntegrationEvent(userId, newUserLocations);
-            _endpoint.Publish(@event);
+            await _endpoint.Publish(@event);
         }
 
         private List<UserLocationDetails> MapUserLocationDetails(List<Locations> newLocations)

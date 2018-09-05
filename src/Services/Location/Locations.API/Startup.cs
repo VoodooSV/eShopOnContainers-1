@@ -121,7 +121,6 @@ namespace Microsoft.eShopOnContainers.Services.Locations.API
               .UseSwaggerUI(c =>
               {
                   c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                  c.ConfigureOAuth2("locationsswaggerui", "", "", "Locations Swagger UI");
               });
 
             WaitForSqlAvailabilityAsync(loggerFactory, app).Wait();

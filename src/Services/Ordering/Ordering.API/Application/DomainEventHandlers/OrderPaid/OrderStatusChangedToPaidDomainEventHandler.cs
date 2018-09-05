@@ -9,11 +9,11 @@ namespace Ordering.API.Application.DomainEventHandlers.OrderPaid
     using Domain.Events;
     using System;
     using System.Threading.Tasks;
-    using Ordering.API.Application.IntegrationEvents;
     using System.Linq;
+    using System.Threading;
 
     public class OrderStatusChangedToPaidDomainEventHandler
-                   : IAsyncNotificationHandler<OrderStatusChangedToPaidDomainEvent>
+                   : INotificationHandler<OrderStatusChangedToPaidDomainEvent>
     {
         private readonly IEndpointInstance _endpoint;
         private readonly IOrderRepository _orderRepository;
@@ -21,14 +21,15 @@ namespace Ordering.API.Application.DomainEventHandlers.OrderPaid
 
         public OrderStatusChangedToPaidDomainEventHandler(
             IEndpointInstance endpoint,
-            IOrderRepository orderRepository, ILoggerFactory logger)
+            IOrderRepository orderRepository, 
+            ILoggerFactory logger)
         {
             _endpoint = endpoint;
             _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task Handle(OrderStatusChangedToPaidDomainEvent orderStatusChangedToPaidDomainEvent)
+        public async Task Handle(OrderStatusChangedToPaidDomainEvent orderStatusChangedToPaidDomainEvent, CancellationToken cancellationToken)
         {
             _logger.CreateLogger(nameof(OrderStatusChangedToPaidDomainEventHandler))
                 .LogTrace($"Order with Id: {orderStatusChangedToPaidDomainEvent.OrderId} has been successfully updated with " +

@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Ordering.API.Application.DomainEventHandlers.OrderStartedEvent
 {
+    using System.Threading;
+
     public class ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler 
-                        : IAsyncNotificationHandler<OrderStartedDomainEvent>
+                        : INotificationHandler<OrderStartedDomainEvent>
     {
         private readonly ILoggerFactory _logger;
         private readonly IBuyerRepository _buyerRepository;
@@ -22,7 +24,7 @@ namespace Ordering.API.Application.DomainEventHandlers.OrderStartedEvent
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task Handle(OrderStartedDomainEvent orderStartedEvent)
+        public async Task Handle(OrderStartedDomainEvent orderStartedEvent, CancellationToken cancellationToken)
         {
             var cardTypeId = (orderStartedEvent.CardTypeId != 0) ? orderStartedEvent.CardTypeId : 1;
 

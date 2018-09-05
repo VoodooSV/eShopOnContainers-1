@@ -149,7 +149,6 @@
                .UseSwaggerUI(c =>
                {
                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                   c.ConfigureOAuth2("marketingswaggerui", "", "", "Marketing Swagger UI");
                });
 
             WaitForSqlAvailabilityAsync(loggerFactory, app).Wait();

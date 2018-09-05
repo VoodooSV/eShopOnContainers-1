@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Ordering.API.Application.Commands
 {
+    using System.Threading;
     using eShopOnContainers.Services.IntegrationEvents.Events;
     using NServiceBus;
 
@@ -24,7 +25,7 @@ namespace Ordering.API.Application.Commands
         }
     }
 
-    public class CancelOrderCommandHandler : IAsyncRequestHandler<CancelOrderCommand, bool>
+    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, bool>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMessageSession _endpoint;
@@ -39,7 +40,7 @@ namespace Ordering.API.Application.Commands
         /// <summary>
         /// Handler which processes the command when customer executes cancel order from app
         /// </summary>
-        public async Task<bool> Handle(CancelOrderCommand command)
+        public async Task<bool> Handle(CancelOrderCommand command, CancellationToken cancellationToken)
         {
             var orderToUpdate = await _orderRepository.GetAsync(command.OrderNumber);
             orderToUpdate.SetCancelledStatus();

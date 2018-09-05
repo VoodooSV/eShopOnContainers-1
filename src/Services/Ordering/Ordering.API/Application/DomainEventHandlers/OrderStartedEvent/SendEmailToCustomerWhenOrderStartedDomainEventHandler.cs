@@ -9,14 +9,14 @@ using Ordering.Domain.Events;
 namespace Ordering.API.Application.DomainEventHandlers.OrderStartedEvent
 {
     public class SendEmailToCustomerWhenOrderStartedDomainEventHandler
-                   //: IAsyncNotificationHandler<OrderStartedDomainEvent>
+                   //: INotificationHandler<OrderStartedDomainEvent>
     { 
         public SendEmailToCustomerWhenOrderStartedDomainEventHandler()
         {
         
         }
 
-        //public async Task Handle(OrderStartedDomainEvent orderNotification)
+        //protected override async Task Handle(OrderStartedDomainEvent orderNotification, CancellationToken cancellationToken)
         //{
         //    //TBD - Send email logic
         //}
