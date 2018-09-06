@@ -154,7 +154,7 @@ namespace eShopOnContainers.Identity
             });
 
             // Store idsrv grant config into db
-            InitializeGrantStoreAndConfiguration(app).Wait();
+//            InitializeGrantStoreAndConfiguration(app).Wait();
 
             //Seed Data
             var hasher = new PasswordHasher<ApplicationUser>();
