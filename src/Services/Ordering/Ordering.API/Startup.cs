@@ -115,7 +115,7 @@
             ConfigureAuthService(services);
             services.AddOptions();
 
-            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
+//            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
 
             //configure autofac
 
@@ -123,7 +123,7 @@
 
             containerBuilder.Populate(services);
 
-//            containerBuilder.RegisterModule(new MediatorModule());
+            containerBuilder.RegisterModule(new MediatorModule());
             containerBuilder.RegisterModule(new ApplicationModule(Configuration["ConnectionString"]));
 
             // NServiceBus
